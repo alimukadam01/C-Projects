@@ -56,13 +56,13 @@ int isFull(struct queue *q){
     return 0;
 };
  
-void enqueue(struct queue *q, struct Request r){
+void enqueue(struct queue *q, struct Request req){
     if(isFull(q)){
         printf("This Queue is full\n");
     }
     else{
         q->r++;
-        q->arr[q->r] = r;
+        q->arr[q->r] = req;
         printf("Enqued element.\n");
     }
 };
@@ -97,52 +97,60 @@ void* request(void* args) {
         fprintf (output, "From Floor %d to Floor %d\n", r1.from, r1.to);
         fprintf (output, "--------------------------------------------\n");
         
-        enqueue(&Buffer, r1);
-        count++;
-
+        if(isFull(&Buffer) != 1){
+            enqueue(&Buffer, r1);
+            count++;
+        }
+            
         pthread_mutex_unlock(&mutexBuffer);
         sem_post(&semFull);
     }
 }
 
 void* lift(void* args) {
+    sem_wait(&semFull);
+    pthread_mutex_lock(&mutexBuffer);
     struct Lift l1 = *(struct Lift*)args;
-    //struct Lift l1;
     struct Request r1;
+    pthread_mutex_unlock(&mutexBuffer);
+    sem_post(&semEmpty);
 
-    while(!(isEmpty(&Buffer)==1 && count>0)){
+    while(count > 0){
         sem_wait(&semFull);
         pthread_mutex_lock(&mutexBuffer);
         
-        r1 = dequeue(&Buffer);
-        count--;
+        if(isEmpty(&Buffer) == 0){
+            r1 = dequeue(&Buffer);
+            count--;
 
+            l1.movement = 0;//Resetting movement.
+            l1.tRequests++;//Incrementing total requests.
+
+            fprintf(output, "Lift %d Operations\nPrevious Position: %d Floor\nRequest: number %d from Floor %d to Floor %d\n", l1.liftNo, l1.c_pos, r1.reqNo, r1.from, r1.to);
+            fprintf(output, "Detail Operations:\n\tGo from Floor %d to Floor %d\n", l1.c_pos, r1.from);
+            
+            //Stimulating lift movement.
+            sleep(1);
+            l1.movement += abs(l1.c_pos - r1.from);
+            l1.c_pos = r1.from;
+            
+            fprintf(output, "\tGo from Floor %d to Floor %d\n", r1.from, r1.to);
+            
+            sleep(1);
+            l1.movement += abs(r1.to - r1.from);
+            l1.c_pos = r1.to;
+
+            //Adding to total movement.
+            l1.tMovement += l1.movement;
+
+            fprintf(output, "\t#movement for this request: %d\n", l1.movement);
+            fprintf(output, "\t#Requests: %d\n", l1.tRequests);
+            fprintf(output, "\tTotal #movement: %d\n", l1.tMovement);
+            fprintf(output, "Current Position: %d Floor\n", r1.to);
+        }
+        
         pthread_mutex_unlock(&mutexBuffer);
         sem_post(&semEmpty);
-
-        fprintf(output, "Lift %d Operations\nPrevious Position: %d Floor\nRequest: number %d from Floor %d to Floor %d\n", l1.liftNo, l1.c_pos, r1.reqNo, r1.from, r1.to);
-        fprintf(output, "Detail Operations:\n\tGo from Floor %d to Floor %d\n", l1.c_pos, r1.from);
-        
-        sleep(1);
-        l1.movement += abs(l1.c_pos - r1.from);
-        l1.c_pos = r1.from;
-        
-        fprintf(output, "\tGo from Floor %d to Floor %d\n", r1.from, r1.to);
-        
-        sleep(1);
-        l1.movement += abs(r1.to - r1.from);
-        l1.c_pos = r1.to;
-
-        fprintf(output, "\t#movement for this request: %d\n", l1.movement);
-        fprintf(output, "\t#Requests: %d\n", l1.tRequests);
-        fprintf(output, "\tTotal #movement: %d\n", l1.tMovement);
-        fprintf(output, "Current Position: %d Floor\n", r1.to);
-
-        l1.tMovement += l1.movement;
-        l1.movement = 0;
-        l1.tRequests++;
-
-
     }
 }
 
@@ -152,13 +160,27 @@ int main(int argc, char* argv[]) {
     pthread_mutex_init(&mutexBuffer, NULL);
     sem_init(&semEmpty, 0, 10);
     sem_init(&semFull, 0, 0);
+    Buffer.size = 10;
+    Buffer.f , Buffer.r = -1;
+    Buffer.arr = malloc(sizeof(struct Request)*Buffer.size);
     struct Lift l1, l2, l3;
+    
+    //Setting values for lifts.
     l1.liftNo = 1;
     l2.liftNo = 2;
     l3.liftNo = 3;    
-    l1.c_pos, l2.c_pos, l3.c_pos = 1;
-    l1.tMovement, l2.tMovement, l3.tMovement = 0;
-    l1.tRequests, l2.tRequests, l3.tRequests = 0;
+    l1.c_pos = 1; 
+    l2.c_pos= 1; 
+    l3.c_pos = 1;
+    l1.tMovement = 0;
+    l2.tMovement = 0;
+    l3.tMovement = 0;
+    l1.tRequests = 0;
+    l2.tRequests = 0;
+    l3.tRequests = 0;
+    l1.movement = 0;
+    l2.movement = 0;
+    l3.movement = 0;
 
     //Dynamically allocating lifts for use in threads.
     struct Lift* lift1 = malloc(sizeof(struct Lift));
@@ -210,13 +232,15 @@ int main(int argc, char* argv[]) {
     }
     
     //Freeing memory.
-    sem_destroy(&semEmpty);
-    sem_destroy(&semFull);
-    pthread_mutex_destroy(&mutexBuffer);
-    fclose(input);
-    fclose(output);
-    free(lift3);    
-    free(lift1);
-    free(lift2);
+    if(count < 1 && isEmpty(&Buffer) == 1){
+        sem_destroy(&semEmpty);
+        sem_destroy(&semFull);
+        pthread_mutex_destroy(&mutexBuffer);
+        fclose(input);
+        fclose(output);
+        free(lift1);    
+        free(lift2);
+        free(lift3);
+    }
     return 0;
 }
