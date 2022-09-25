@@ -1,0 +1,142 @@
+--------------------------------------------
+Request No: 1
+From Floor 1 to Floor 5
+--------------------------------------------
+--------------------------------------------
+Request No: 2
+From Floor 7 to Floor 2
+--------------------------------------------
+--------------------------------------------
+Request No: 3
+From Floor 3 to Floor 8
+--------------------------------------------
+--------------------------------------------
+Request No: 4
+From Floor 4 to Floor 11
+--------------------------------------------
+--------------------------------------------
+Request No: 5
+From Floor 12 to Floor 15
+--------------------------------------------
+--------------------------------------------
+Request No: 6
+From Floor 2 to Floor 9
+--------------------------------------------
+--------------------------------------------
+Request No: 7
+From Floor 11 to Floor 7
+--------------------------------------------
+--------------------------------------------
+Request No: 8
+From Floor 8 to Floor 15
+--------------------------------------------
+--------------------------------------------
+Request No: 9
+From Floor 12 to Floor 19
+--------------------------------------------
+--------------------------------------------
+Request No: 10
+From Floor 20 to Floor 7
+--------------------------------------------
+Lift 1 Operations
+Previous Position: 1 Floor
+Request: number 1 from Floor 1 to Floor 5
+Detail Operations:
+	Go from Floor 1 to Floor 1
+	Go from Floor 1 to Floor 5
+	#movement for this request: 4
+	#Requests: 1
+	Total #movement: 4
+Current Position: 5 Floor
+Lift 3 Operations
+Previous Position: 1 Floor
+Request: number 2 from Floor 7 to Floor 2
+Detail Operations:
+	Go from Floor 1 to Floor 7
+	Go from Floor 7 to Floor 2
+	#movement for this request: 11
+	#Requests: 1
+	Total #movement: 11
+Current Position: 2 Floor
+Lift 3 Operations
+Previous Position: 2 Floor
+Request: number 3 from Floor 3 to Floor 8
+Detail Operations:
+	Go from Floor 2 to Floor 3
+	Go from Floor 3 to Floor 8
+	#movement for this request: 6
+	#Requests: 2
+	Total #movement: 17
+Current Position: 8 Floor
+Lift 3 Operations
+Previous Position: 8 Floor
+Request: number 4 from Floor 4 to Floor 11
+Detail Operations:
+	Go from Floor 8 to Floor 4
+	Go from Floor 4 to Floor 11
+	#movement for this request: 11
+	#Requests: 3
+	Total #movement: 28
+Current Position: 11 Floor
+Lift 3 Operations
+Previous Position: 11 Floor
+Request: number 5 from Floor 12 to Floor 15
+Detail Operations:
+	Go from Floor 11 to Floor 12
+	Go from Floor 12 to Floor 15
+	#movement for this request: 4
+	#Requests: 4
+	Total #movement: 32
+Current Position: 15 Floor
+Lift 3 Operations
+Previous Position: 15 Floor
+Request: number 6 from Floor 2 to Floor 9
+Detail Operations:
+	Go from Floor 15 to Floor 2
+	Go from Floor 2 to Floor 9
+	#movement for this request: 20
+	#Requests: 5
+	Total #movement: 52
+Current Position: 9 Floor
+Lift 2 Operations
+Previous Position: 1 Floor
+Request: number 7 from Floor 11 to Floor 7
+Detail Operations:
+	Go from Floor 1 to Floor 11
+	Go from Floor 11 to Floor 7
+	#movement for this request: 14
+	#Requests: 1
+	Total #movement: 14
+Current Position: 7 Floor
+Lift 2 Operations
+Previous Position: 7 Floor
+Request: number 8 from Floor 8 to Floor 15
+Detail Operations:
+	Go from Floor 7 to Floor 8
+	Go from Floor 8 to Floor 15
+	#movement for this request: 8
+	#Requests: 2
+	Total #movement: 22
+Current Position: 15 Floor
+Lift 3 Operations
+Previous Position: 9 Floor
+Request: number 9 from Floor 12 to Floor 19
+Detail Operations:
+	Go from Floor 9 to Floor 12
+	Go from Floor 12 to Floor 19
+	#movement for this request: 10
+	#Requests: 6
+	Total #movement: 62
+Current Position: 19 Floor
+Lift 3 Operations
+Previous Position: 19 Floor
+Request: number 10 from Floor 20 to Floor 7
+Detail Operations:
+	Go from Floor 19 to Floor 20
+	Go from Floor 20 to Floor 7
+	#movement for this request: 14
+	#Requests: 7
+	Total #movement: 76
+Current Position: 7 Floor
+Total number of requests: 10
+Total number of requests: 318
